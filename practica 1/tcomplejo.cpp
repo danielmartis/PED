@@ -59,19 +59,22 @@ TComplejo TComplejo::operator*(const TComplejo &tc){
 
 TComplejo TComplejo::operator+(const double n){
     TComplejo tc(n);
-    tc.re += this->re;
+    tc.re +=this->re;
+    tc.im = this->im;
     return tc;
 }
 
 TComplejo TComplejo::operator-(const double n){
     TComplejo tc(n);
     tc.re -= this->re;
+    tc.im = this->im;
     return tc;
 }
 
 TComplejo TComplejo::operator*(const double n){
     TComplejo tc(n);
     tc.re *= this->re;
+    tc.im = this->im;
     return tc;
 }
 

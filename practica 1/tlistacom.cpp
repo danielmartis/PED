@@ -49,6 +49,7 @@ TListaPos & TListaPos::operator=(const TListaPos &tlp){
 }
 
 bool TListaPos::operator==(const TListaPos &tlp) const {
+
     return pos == tlp.pos;
 }
 
@@ -136,7 +137,7 @@ bool TListaCom::operator==(const TListaCom &tlc ) const{
       TListaPos tlp;
       tlp = tlc.Primera();
       for (TListaPos tlp2 = Primera(); !tlp2.EsVacia(); tlp = tlp.Siguiente()){
-          if (tlp.pos->e != tlp2.pos->e)
+          if (tlp.pos != tlp2.pos)
             return false;
           tlp2 = tlp2.Siguiente();
       }
@@ -337,6 +338,7 @@ TComplejo TListaCom::Obtener(const TListaPos &tlp) const{
 
 bool TListaCom::Buscar(const TComplejo &tc) const {
     for(TListaPos tlp = Primera(); !tlp.EsVacia(); tlp = tlp.Siguiente()){
+        cout<<tlp.pos->e;
         if(tlp.pos->e == tc)
             return true;
     }
