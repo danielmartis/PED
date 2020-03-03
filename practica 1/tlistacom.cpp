@@ -12,7 +12,7 @@ TListaNodo::TListaNodo() {
 
 TListaNodo::TListaNodo(const TListaNodo &tln) {
     this->e = tln.e;
-    this->anterior = NULL;
+    this->anterior = tln.anterior;
     this->siguiente = tln.siguiente;
 }
 
@@ -338,7 +338,6 @@ TComplejo TListaCom::Obtener(const TListaPos &tlp) const{
 
 bool TListaCom::Buscar(const TComplejo &tc) const {
     for(TListaPos tlp = Primera(); !tlp.EsVacia(); tlp = tlp.Siguiente()){
-        cout<<tlp.pos->e;
         if(tlp.pos->e == tc)
             return true;
     }
