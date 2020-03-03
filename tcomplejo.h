@@ -10,9 +10,9 @@ using namespace std;
 
 class TComplejo {
     friend ostream & operator<<(ostream &, const TComplejo &);
-    //friend TComplejo operator+ (const double,const TComplejo&);
-    //friend TComplejo operator- (const double, const TComplejo&);
-    //friend TComplejo operator* (const double,const TComplejo&);
+    friend TComplejo operator+ (const double,const TComplejo&);
+    friend TComplejo operator- (const double, const TComplejo&);
+    friend TComplejo operator* (const double,const TComplejo&);
 
     private:
         double re; // Parte real
