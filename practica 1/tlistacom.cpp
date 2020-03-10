@@ -60,7 +60,7 @@ bool TListaPos::operator!=(const TListaPos &tlp) const {
 TListaPos TListaPos::Anterior() const {
   TListaPos tlp;
   if(pos!= NULL)
-    tlp.pos = pos->siguiente;
+    tlp.pos = pos->anterior;
   else
     tlp.pos = NULL;
   return tlp;
@@ -97,10 +97,8 @@ TListaCom::TListaCom(const TListaCom &tlc){
 
    }
    else{
-       aux = tlc.Primera();
-        this->InsCabeza(aux.pos->e);
-      for(aux.pos = aux.Siguiente().pos; !aux.EsVacia(); aux.pos = aux.Siguiente().pos){
-        this->InsertarD(aux.pos->e,aux);
+      for(aux.pos = tlc.Ultima().pos; !aux.EsVacia(); aux.pos = aux.Anterior().pos){
+          InsCabeza(aux.pos->e);
       }
    }
 }
@@ -124,10 +122,8 @@ TListaCom & TListaCom::operator=(const TListaCom &tlc){
           ultimo = NULL;
       }
       else{
-        aux = tlc.Primera();
-        InsCabeza(aux.pos->e);
-        for(aux = aux.Siguiente(); !aux.EsVacia(); aux = aux.Siguiente())
-          InsertarD(aux.pos->e,aux);
+        for(aux = tlc.Ultima(); !aux.EsVacia(); aux = aux.Anterior())
+          InsCabeza(aux.pos->e);
       }
     }
     return *this;
@@ -155,9 +151,10 @@ bool TListaCom::operator!=(const TListaCom &tlc) const {
 
 TListaCom TListaCom::operator+(const TListaCom &tlc) const {
     TListaCom nueva;
-    for (TListaPos tlp = this->Primera(); !tlp.EsVacia(); tlp = tlp.Siguiente())
+    
+    for (TListaPos tlp = tlc.Ultima(); !tlp.EsVacia(); tlp = tlp.Anterior())
         nueva.InsCabeza(tlp.pos->e);
-    for (TListaPos tlp = tlc.Primera(); !tlp.EsVacia(); tlp = tlp.Siguiente())
+    for (TListaPos tlp = this->Ultima(); !tlp.EsVacia(); tlp = tlp.Anterior())
         nueva.InsCabeza(tlp.pos->e);
     return nueva;
 }
@@ -178,23 +175,24 @@ bool TListaCom::EsVacia() const {
 }
 
 bool TListaCom::InsCabeza(const TComplejo &tc){
-    if (primero == NULL && ultimo == NULL){
-       TListaNodo *nodo = new TListaNodo();
-       nodo->e = tc;
-       this->primero = nodo;
-       this->ultimo = nodo;
-       return true;
-    }
-    else {
-        TListaNodo *nodo = new TListaNodo();
-        TListaPos aux;
+    TListaNodo *nodo = new TListaNodo();
+    if(nodo){
+        if (primero == NULL && ultimo == NULL){
         nodo->e = tc;
-        aux = Primera();
-        nodo->siguiente = aux.pos;
-        nodo->anterior = NULL;
-        aux.pos->anterior = nodo;
-        primero = nodo;
+        this->primero = nodo;
+        this->ultimo = nodo;
         return true;
+        }
+        else {
+            TListaPos aux;
+            nodo->e = tc;
+            aux = Primera();
+            nodo->siguiente = aux.pos;
+            nodo->anterior = NULL;
+            aux.pos->anterior = nodo;
+            primero = nodo;
+            return true;
+        }
     }
     return false;
 }
@@ -203,73 +201,77 @@ bool TListaCom::InsertarI(const TComplejo &tc, const TListaPos &tlp){
     if(tlp.EsVacia()){
         return false;
     }
-    if (primero == NULL && ultimo == NULL){
-        TListaNodo *nodo = new TListaNodo();
-        nodo->e = tc;
-        this->primero = nodo;
-        this->ultimo = nodo;
-        return true;
-    }
-    for (TListaPos aux = Primera(); !aux.EsVacia(); aux = aux.Siguiente()){
-        if (aux == tlp){
-            if (tlp.Anterior().EsVacia()){
-                TListaNodo *nodo = new TListaNodo();
-                nodo->e = tc;
-                nodo->siguiente = tlp.pos;
-                tlp.pos->anterior = nodo;
-                primero = nodo;
-                nodo->anterior = NULL;
-                return true;
-            }
-            else {
-                TListaNodo *nodo = new TListaNodo();
-                TListaPos aux = tlp.Anterior();
-
-                nodo->e = tc;
-                nodo->siguiente = tlp.pos;
-                tlp.pos->anterior = nodo;
-                nodo->anterior = aux.pos;
-                aux.pos = nodo;
-            }
+    TListaNodo *nodo = new TListaNodo();
+    if (nodo){
+        if (primero == NULL && ultimo == NULL){
+            nodo->e = tc;
+            this->primero = nodo;
+            this->ultimo = nodo;
+            return true;
         }
+        for (TListaPos aux = Primera(); !aux.EsVacia(); aux = aux.Siguiente()){
+            if (aux == tlp){
+                if (tlp.Anterior().EsVacia()){
+                    nodo->e = tc;
+                    nodo->siguiente = tlp.pos;
+                    tlp.pos->anterior = nodo;
+                    primero = nodo;
+                    nodo->anterior = NULL;
+                    return true;
+                }
+                else {
+                    TListaNodo *nodo = new TListaNodo();
+                    TListaPos aux = tlp.Anterior();
 
+                    nodo->e = tc;
+                    nodo->siguiente = tlp.pos;
+                    tlp.pos->anterior = nodo;
+                    nodo->anterior = aux.pos;
+                    aux.pos = nodo;
+                }
+            }
+
+        }
     }
 }
 
 bool TListaCom::InsertarD(const TComplejo &tc, const TListaPos &tlp ){
-        if(tlp.EsVacia()){
+    if(tlp.EsVacia()){
         return false;
     }
-    if (primero == NULL && ultimo == NULL){
-        TListaNodo *nodo = new TListaNodo();
-        nodo->e = tc;
-        this->primero = nodo;
-        this->ultimo = nodo;
-        return true;
-    }
-    for (TListaPos aux = Primera(); !aux.EsVacia(); aux = aux.Siguiente()){
-        if (aux == tlp){
-            if (tlp.Siguiente().EsVacia()){
-                TListaNodo *nodo = new TListaNodo();
-                nodo->e = tc;
-                nodo->anterior = tlp.pos;
-                tlp.pos->siguiente = nodo;
-                ultimo = nodo;
-                nodo->siguiente = NULL;
-                return true;
-            }
-            else {
-                TListaNodo *nodo = new TListaNodo();
-                TListaPos aux = tlp.Siguiente();
-
-                nodo->e = tc;
-                nodo->anterior = tlp.pos;
-                tlp.pos->siguiente = nodo;
-                nodo->siguiente = aux.pos;
-                aux.pos->anterior = nodo;
-            }
+    TListaNodo *nodo = new TListaNodo();
+    if(nodo){
+        if (primero == NULL && ultimo == NULL){
+            TListaNodo *nodo = new TListaNodo();
+            nodo->e = tc;
+            this->primero = nodo;
+            this->ultimo = nodo;
+            return true;
         }
+        for (TListaPos aux = Primera(); !aux.EsVacia(); aux = aux.Siguiente()){
+            if (aux == tlp){
+                if (tlp.Siguiente().EsVacia()){
+                    TListaNodo *nodo = new TListaNodo();
+                    nodo->e = tc;
+                    nodo->anterior = tlp.pos;
+                    tlp.pos->siguiente = nodo;
+                    ultimo = nodo;
+                    nodo->siguiente = NULL;
+                    return true;
+                }
+                else {
+                    TListaNodo *nodo = new TListaNodo();
+                    TListaPos aux = tlp.Siguiente();
 
+                    nodo->e = tc;
+                    nodo->anterior = tlp.pos;
+                    tlp.pos->siguiente = nodo;
+                    nodo->siguiente = aux.pos;
+                    aux.pos->anterior = nodo;
+                }
+            }
+
+        }
     }
 }
 
@@ -326,7 +328,7 @@ bool TListaCom::Borrar(TListaPos &tlp){
         }
         if (encontrado == true){
           delete tlp.pos;
-          tlp.pos = NULL;
+          tlp.~TListaPos();
         }
     }
     return encontrado;
