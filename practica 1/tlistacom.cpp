@@ -97,8 +97,10 @@ TListaCom::TListaCom(const TListaCom &tlc){
 
    }
    else{
-      for(aux.pos = tlc.Ultima().pos; !aux.EsVacia(); aux.pos = aux.Anterior().pos){
+       aux = tlc.Primera();
         this->InsCabeza(aux.pos->e);
+      for(aux.pos = aux.Siguiente().pos; !aux.EsVacia(); aux.pos = aux.Siguiente().pos){
+        this->InsertarD(aux.pos->e,aux);
       }
    }
 }
@@ -122,8 +124,10 @@ TListaCom & TListaCom::operator=(const TListaCom &tlc){
           ultimo = NULL;
       }
       else{
-        for(aux = tlc.Ultima(); !aux.EsVacia(); aux = aux.Anterior())
-          InsCabeza(aux.pos->e);
+        aux = tlc.Primera();
+        InsCabeza(aux.pos->e);
+        for(aux = aux.Siguiente(); !aux.EsVacia(); aux = aux.Siguiente())
+          InsertarD(aux.pos->e,aux);
       }
     }
     return *this;
@@ -187,6 +191,7 @@ bool TListaCom::InsCabeza(const TComplejo &tc){
         nodo->e = tc;
         aux = Primera();
         nodo->siguiente = aux.pos;
+        nodo->anterior = NULL;
         aux.pos->anterior = nodo;
         primero = nodo;
         return true;
