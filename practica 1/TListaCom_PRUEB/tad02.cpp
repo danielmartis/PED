@@ -15,7 +15,6 @@ main(void)
   TListaCom l1,l2;
 
   l1.InsCabeza(a);
-
   if(l1 == l2)
     cout << "SI" << endl;
   else

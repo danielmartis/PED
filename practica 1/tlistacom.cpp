@@ -49,8 +49,7 @@ TListaPos & TListaPos::operator=(const TListaPos &tlp){
 }
 
 bool TListaPos::operator==(const TListaPos &tlp) const {
-
-    return pos == tlp.pos;
+     return pos == tlp.pos;
 }
 
 bool TListaPos::operator!=(const TListaPos &tlp) const {
@@ -137,7 +136,7 @@ bool TListaCom::operator==(const TListaCom &tlc ) const{
       TListaPos tlp;
       tlp = tlc.Primera();
       for (TListaPos tlp2 = Primera(); !tlp2.EsVacia(); tlp = tlp.Siguiente()){
-          if (tlp.pos != tlp2.pos)
+          if (tlp.pos->e != tlp2.pos->e)
             return false;
           tlp2 = tlp2.Siguiente();
       }
