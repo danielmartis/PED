@@ -70,8 +70,8 @@ int TVectorCom::Tamano() const {
 }
 
 int TVectorCom::Ocupadas() const {
-	int contador;
-	for (int i = 0; i <= tamano; i++){
+	int contador = 0;
+	for (int i = 0; i < tamano; i++){
 		if (c[i].Re() != 0 || c[i].Im() != 0)
 			contador++;
 	}
@@ -79,7 +79,7 @@ int TVectorCom::Ocupadas() const {
 }
 
 bool TVectorCom::ExisteCom(const TComplejo &tc) const {
-	for (int i = 0; i<= tamano;i++){
+	for (int i = 0; i< tamano;i++){
 		if(c[i].Re() == tc.Re() && c[i].Im() == tc.Im())
 			return true;
 	}
@@ -87,10 +87,17 @@ bool TVectorCom::ExisteCom(const TComplejo &tc) const {
 }
 
 void TVectorCom::MostrarComplejos(const double n) const{
-	for(int i = 0; i<= tamano; i++){
-		if (c[i].Re() >= n)
-			cout<<c[i];
+    cout<< "[";
+    bool mostrar = false;
+	for(int i = 0; i< tamano; i++){
+            if (c[i].Re() >= n){
+                if(mostrar == true)
+                    cout<<", ";
+                cout<<c[i];
+                mostrar = true;
+            }
 	}
+    cout<<"]";
 }
 
 bool TVectorCom::Redimensionar(const int n) {
@@ -111,7 +118,7 @@ bool TVectorCom::Redimensionar(const int n) {
 	if (n > 0 && n < this->tamano){
 		TVectorCom tvc(n);
 		for (int i = 0; i<n; i++)
-			tvc.c[i] == this->c[i];
+			tvc.c[i] = this->c[i];
 		delete [] this->c;
 		this-> tamano = n;
 		this->c = new TComplejo[n];

@@ -5,13 +5,13 @@
 using namespace std;
 
 TComplejo::TComplejo() {
-    re = 0;
-    im = 0;
+    re = +0;
+    im = +0;
 }
 
 TComplejo::TComplejo(const double real) {
     re = real;
-    im = 0;
+    im = +0;
 }
 
 TComplejo::TComplejo(const double real,const double imag) {
@@ -26,8 +26,8 @@ TComplejo::TComplejo (const TComplejo &tc) {
 }
 
 TComplejo::~TComplejo() {
-    re = 0;
-    im = 0;
+    re = +0;
+    im = +0;
 }
 
 TComplejo& TComplejo::operator=(const TComplejo &tc){
@@ -52,29 +52,35 @@ TComplejo TComplejo::operator-(const TComplejo &tc){
 
 TComplejo TComplejo::operator*(const TComplejo &tc){
     TComplejo aux;
+    double ima = tc.re * this->im;
+    ima += this->im * tc.im;
+    ima += this->re * tc.im;
     aux.re = this->re * tc.re;
-    aux.im = this->im * tc.im;
+    aux.im = ima;
     return aux;
 }
 
 TComplejo TComplejo::operator+(const double n){
     TComplejo tc(n);
-    tc.re +=this->re;
-    tc.im = this->im;
+    tc.re = this->re + tc.re;
+    tc.im = this->im + tc.re;
     return tc;
 }
 
 TComplejo TComplejo::operator-(const double n){
     TComplejo tc(n);
-    tc.re -= this->re;
+    tc.re = this->re - tc.re;
     tc.im = this->im;
     return tc;
 }
 
 TComplejo TComplejo::operator*(const double n){
     TComplejo tc(n);
-    tc.re *= this->re;
-    tc.im = this->im;
+    double ima = tc.re * this->im;
+    ima += this->im * tc.im;
+    ima += this->re * tc.im;
+    tc.re = this->re * tc.re;
+    tc.im = ima;
     return tc;
 }
 
@@ -122,23 +128,23 @@ ostream & operator<<(ostream &os, const TComplejo &tc) {
     return os;
 }
 
-/*TComplejo TComplejo::operator+(const double n, const TComplejo &tc){
+TComplejo operator+(const double n, const TComplejo &tc){
     TComplejo aux;
     TComplejo n2(n);
     aux = n2 + tc;
     return aux;
 }
 
-TComplejo TComplejo::operator-(const double n, const TComplejo &tc){
+TComplejo operator-(const double n, const TComplejo &tc){
     TComplejo aux;
     TComplejo n2(n);
     aux = n2 - tc;
     return aux;
 }
 
-TComplejo TComplejo::operator*(const double n, const TComplejo &tc){
+TComplejo operator*(const double n, const TComplejo &tc){
     TComplejo aux;
     TComplejo n2(n);
     aux = n2 * tc;
     return aux;
-}*/
+}

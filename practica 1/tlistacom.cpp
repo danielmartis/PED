@@ -110,10 +110,13 @@ TListaCom::~TListaCom() {
       delete ptn;
       ptn = primero;
   }
+  primero = NULL;
+  ultimo = NULL;
 }
 
 TListaCom & TListaCom::operator=(const TListaCom &tlc){
     TListaPos aux;
+    TComplejo tc;
     if (this != &tlc){
       this->~TListaCom();
       if (tlc.primero == NULL && tlc.ultimo == NULL ){
@@ -160,7 +163,7 @@ TListaCom TListaCom::operator+(const TListaCom &tlc) const {
 
 TListaCom TListaCom::operator-(const TListaCom &tlc) const {
     TListaCom nueva;
-    for (TListaPos tlp = this->Primera(); !tlp.EsVacia(); tlp = tlp.Siguiente()){
+    for (TListaPos tlp = this->Ultima(); !tlp.EsVacia(); tlp = tlp.Anterior()){
         if(!tlc.Buscar(tlp.pos->e))
           nueva.InsCabeza(tlp.pos->e);
     }
