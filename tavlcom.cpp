@@ -91,6 +91,10 @@ bool TAVLCom::operator==(const TAVLCom &tac) const{
     return true;
 }
 
+bool TAVLCom::operator!=(const TAVLCom &tac) const{
+    return !(*this==tac);
+}
+
 bool TAVLCom::EsVacio() const{
     if (this->raiz == NULL)
         return true;
